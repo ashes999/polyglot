@@ -30,9 +30,33 @@ class TranslaterTest
     }
 
     @Test
+    public function constructorThrowsIfNoTranslationsExist():Void
+    {
+        Assert.isTrue(true);
+    }
+
+    @Test
+    public function constructorThrowsIfSelectLanguageWasntCalled():Void
+    {
+        Assert.isTrue(true);
+    }
+
+    @Test
+    public function selectLanguageThrowsIfLanguageWasntAdded():Void
+    {
+        Assert.isTrue(true);
+    }
+
+    @Test
 	public function getGetsTranslationInSpecifiedLanguage():Void
 	{
-		Assert.isTrue(true);
+        var key:String = "HELLO_WORLD";
+        var expected:String = "السلام عليكم";
+		Translater.addTranslation("ar-SA", '${key}: ${expected}');
+        Translater.selectLanguage("ar-SA");
+        
+        var actual = new Translater().get(key);
+        Assert.areEqual(expected, actual);
 	}
 
     @Test

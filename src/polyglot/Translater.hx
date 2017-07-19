@@ -7,16 +7,30 @@ using StringTools;
 class Translater
 {
     // language code => { key => translation }
-    private static var translations:Map<String, Map<String, String>>;
+    private static var translations:Map<LanguageAndCultureCode, Map<String, String>>;
+    private static var currentLanguage:LanguageAndCultureCode = "";
+
+    public function new()
+    {
+        if (!Translater.translations.keys().hasNext())
+        {
+            throw "Please call Translater.addTranslation before instantiating a translater";
+        }
+        else if (Translater.currentLanguage == "")
+        {
+            throw "Please call Translater.selectLanguage before instantiating a translater";
+        }
+    }
 
     public static function initialize():Void
     {
-        Translater.translations = new Map<String, Map<String, String>>();
+        Translater.translations = new Map<LanguageAndCultureCode, Map<String, String>>();
+        Translater.currentLanguage = "";
     } 
 
     // TODO: having a single .xml file or something listing languages would be nice.
     // We can't auto-discover files because there ARE no files on JS.
-    public static function addTranslation(languageCode:String, translationFileContents:String):Void
+    public static function addTranslation(languageCode:LanguageAndCultureCode, translationFileContents:String):Void
     {
         var lines = translationFileContents.split('\n');
         var toReturn = new Map<String, String>();
@@ -34,4 +48,22 @@ class Translater
         }
         translations.set(languageCode, toReturn);
     }
+
+    public static function selectLanguage(languageCode:LanguageAndCultureCode):Void
+    {
+        if (!translations.exists(languageCode))
+        {
+            throw '${languageCode} is not a valid language code (valid options: ${Translater.translations.keys}). Did you forget to call Translater.addTranslation?';
+        }
+
+        Translater.currentLanguage = languageCode;
+    }
+
+    public function get(key:String):String
+    {
+        var messages = Translater.translations.get(Translater.currentLanguage);
+        return messages.get(key);
+    }
 }
+
+typedef LanguageAndCultureCode = String;
