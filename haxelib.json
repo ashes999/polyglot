@@ -1,0 +1,13 @@
+{
+    "name": "polyglot",
+    "version": "1.0.0",
+    "releasenote": "Initial release",
+
+    "url": "https://github.com/ashes999/polyglot",
+    "description": "Haxelib for I18N (internationalization) project to facilitate L10N (localization) of your Haxe games/apps.",
+    "tags": ["cross", "extension", "utility"],
+    "license": "MIT",    
+    "classPath": "src",
+    "contributors": ["ashes999"],
+    "dependencies": { }
+}

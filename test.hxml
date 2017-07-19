@@ -1,0 +1,9 @@
+## Flash 9+
+-main TestMain
+-lib munit
+-lib hamcrest
+
+## Neko
+-cp src
+-cp test
+-neko build/neko_test.n
