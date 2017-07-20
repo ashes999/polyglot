@@ -13,7 +13,7 @@ import polyglot.Translater;
 */
 class TranslaterTest 
 {
-    @BeforeClass
+    @Before
     public function resetTranslations():Void
     {
         Translater.initialize();
@@ -32,19 +32,34 @@ class TranslaterTest
     @Test
     public function constructorThrowsIfNoTranslationsExist():Void
     {
-        Assert.isTrue(true);
+        var ex:String = Assert.throws(String, function() {
+            new Translater();
+        });
+        
+        Assert.isTrue(ex.indexOf("addTranslation") > -1);
     }
 
     @Test
     public function constructorThrowsIfSelectLanguageWasntCalled():Void
     {
-        Assert.isTrue(true);
+        Translater.addTranslation("en-US", "HELLO_WORLD: Hello, World!");
+        var ex:String = Assert.throws(String, function() {
+            new Translater();
+        });
+        
+        Assert.isTrue(ex.indexOf("selectLanguage") > -1);
     }
 
     @Test
     public function selectLanguageThrowsIfLanguageWasntAdded():Void
     {
-        Assert.isTrue(true);
+        Translater.addTranslation("en-US", "HELLO_WORLD: Hello, World!");
+
+        var ex:String = Assert.throws(String, function() {
+            Translater.selectLanguage("ar-SA");
+        });
+        
+        Assert.isTrue(ex.indexOf("not a valid language code") > -1);
     }
 
     @Test
@@ -62,6 +77,10 @@ class TranslaterTest
     @Test
     public function getReturnsTokenIfMessageIsNotDefined():Void
     {
-		Assert.isTrue(true);
+		Translater.addTranslation("ar-SA", "HELLO_WORLD: السلام عليكم");
+        Translater.selectLanguage("ar-SA");
+        
+        var actual = new Translater().get("GAME_OVER");
+        Assert.areEqual("GAME_OVER", actual);
     }
 }

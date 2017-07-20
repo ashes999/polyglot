@@ -62,7 +62,8 @@ class Translater
     public function get(key:String):String
     {
         var messages = Translater.translations.get(Translater.currentLanguage);
-        return messages.get(key);
+        var toReturn = messages.get(key);
+        return toReturn != null ? toReturn : key;
     }
 }
 
