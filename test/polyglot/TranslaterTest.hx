@@ -6,6 +6,8 @@ import massive.munit.async.AsyncFactory;
 
 import polyglot.Translater;
 
+using StringTools;
+
 /**
 * Auto generated ExampleTest for MassiveUnit. 
 * This is an example test class can be used as a template for writing normal and async tests 
@@ -73,6 +75,22 @@ class TranslaterTest
         var actual = new Translater().get(key);
         Assert.areEqual(expected, actual);
 	}
+
+    @Test
+    public function getSubstitutesParameters():Void
+    {
+        var p1:Int = 6;
+        var p2:String = "Cherry";
+
+        var key:String = "BUY_IT";
+        var message:String = 'Please buy {0} of {1}. {0}{0}{0} {1}!!!';
+		Translater.addTranslation("en-GB", '${key}: ${message}');
+        Translater.selectLanguage("en-GB");
+        
+        var actual = new Translater().get(key, [p1, p2]);
+        var expected = message.replace("{0}", '${p1}').replace("{1}", p2);
+        Assert.areEqual(expected, actual);
+    }
 
     @Test
     public function getReturnsTokenIfMessageIsNotDefined():Void

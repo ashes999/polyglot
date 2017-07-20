@@ -59,11 +59,31 @@ class Translater
         Translater.currentLanguage = languageCode;
     }
 
-    public function get(key:String):String
+    public function get(key:String, ?params:Array<Any>):String
     {
         var messages = Translater.translations.get(Translater.currentLanguage);
         var toReturn = messages.get(key);
-        return toReturn != null ? toReturn : key;
+        if (toReturn == null)
+        {
+            return key;
+        }
+        else if (params == null || params.length == 0)
+        {
+            return toReturn;
+        }
+        else
+        {
+            // Substitute in values
+            var i:Int = 0;
+
+            for (param in params)
+            {
+                toReturn = toReturn.replace('{${i}}', '${param}');
+                i++;
+            }
+
+            return toReturn;
+        }
     }
 }
 
