@@ -7,14 +7,14 @@ using StringTools;
 class Translater
 {
     // language code => { key => translation }
-    private static var translations:Map<LanguageAndCultureCode, Map<String, String>>;
+    private static var translations = new Map<LanguageAndCultureCode, Map<String, String>>();
     private static var currentLanguage:LanguageAndCultureCode = "";
 
     public function new()
     {
         if (!Translater.translations.keys().hasNext())
         {
-            throw "Please call Translater.addTranslation before instantiating a translater";
+            throw "Please call Translater.addLanguage before instantiating a translater";
         }
         else if (Translater.currentLanguage == "")
         {
@@ -22,7 +22,8 @@ class Translater
         }
     }
 
-    public static function initialize():Void
+    // For testing.
+    public static function clear():Void
     {
         Translater.translations = new Map<LanguageAndCultureCode, Map<String, String>>();
         Translater.currentLanguage = "";
@@ -30,12 +31,19 @@ class Translater
 
     // TODO: having a single .xml file or something listing languages would be nice.
     // We can't auto-discover files because there ARE no files on JS.
-    public static function addTranslation(languageCode:LanguageAndCultureCode, translationFileContents:String):Void
+    public static function addLanguage(languageCode:LanguageAndCultureCode, translationFileContents:String):Void
     {
         var lines = translationFileContents.split('\n');
         var toReturn = new Map<String, String>();
         for (line in lines)
         {
+            line = line.trim();
+            // empty or a comment? ignore it.
+            if (line.length == 0 || line.startsWith("#"))
+            {
+                continue;
+            }
+
             var delimeter:Int = line.indexOf(":");
             if (delimeter == -1)
             {
@@ -46,6 +54,7 @@ class Translater
             var message = line.substr(delimeter + 1).trim();
             toReturn.set(key, message);            
         }
+
         translations.set(languageCode, toReturn);
     }
 

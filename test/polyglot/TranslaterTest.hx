@@ -18,14 +18,14 @@ class TranslaterTest
     @Before
     public function resetTranslations():Void
     {
-        Translater.initialize();
+        Translater.clear();
     }
 
     @Test
-    public function addTranslationThrowsIfLanguageFileIsInvalid():Void
+    public function addLanguageThrowsIfLanguageFileIsInvalid():Void
     {
 		var ex:String = Assert.throws(String, function() {
-            Translater.addTranslation("en-US", "not a real file!");
+            Translater.addLanguage("en-US", "not a real language file!");
         });
 
         Assert.isTrue(ex.toLowerCase().indexOf("invalid") > -1);
@@ -38,13 +38,13 @@ class TranslaterTest
             new Translater();
         });
         
-        Assert.isTrue(ex.indexOf("addTranslation") > -1);
+        Assert.isTrue(ex.indexOf("addLanguage") > -1);
     }
 
     @Test
     public function constructorThrowsIfSelectLanguageWasntCalled():Void
     {
-        Translater.addTranslation("en-US", "HELLO_WORLD: Hello, World!");
+        Translater.addLanguage("en-US", "HELLO_WORLD: Hello, World!");
         var ex:String = Assert.throws(String, function() {
             new Translater();
         });
@@ -55,7 +55,7 @@ class TranslaterTest
     @Test
     public function selectLanguageThrowsIfLanguageWasntAdded():Void
     {
-        Translater.addTranslation("en-US", "HELLO_WORLD: Hello, World!");
+        Translater.addLanguage("en-US", "HELLO_WORLD: Hello, World!");
 
         var ex:String = Assert.throws(String, function() {
             Translater.selectLanguage("ar-SA");
@@ -65,11 +65,16 @@ class TranslaterTest
     }
 
     @Test
-	public function getGetsTranslationInSpecifiedLanguage():Void
+	public function getGetsTranslationInSpecifiedLanguageAndIgnoresCommentsAndBlankLines():Void
 	{
         var key:String = "HELLO_WORLD";
         var expected:String = "السلام عليكم";
-		Translater.addTranslation("ar-SA", '${key}: ${expected}');
+		Translater.addLanguage("ar-SA", 
+'${key}: ${expected}
+# This is a comment. Blank lines are ignored.
+
+NUM_APPLES: 7');
+
         Translater.selectLanguage("ar-SA");
         
         var actual = new Translater().get(key);
@@ -84,7 +89,7 @@ class TranslaterTest
 
         var key:String = "BUY_IT";
         var message:String = 'Please buy {0} of {1}. {0}{0}{0} {1}!!!';
-		Translater.addTranslation("en-GB", '${key}: ${message}');
+		Translater.addLanguage("en-GB", '${key}: ${message}');
         Translater.selectLanguage("en-GB");
         
         var actual = new Translater().get(key, [p1, p2]);
@@ -95,7 +100,7 @@ class TranslaterTest
     @Test
     public function getReturnsTokenIfMessageIsNotDefined():Void
     {
-		Translater.addTranslation("ar-SA", "HELLO_WORLD: السلام عليكم");
+		Translater.addLanguage("ar-SA", "HELLO_WORLD: السلام عليكم");
         Translater.selectLanguage("ar-SA");
         
         var actual = new Translater().get("GAME_OVER");
