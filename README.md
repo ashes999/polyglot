@@ -25,13 +25,13 @@ import polyglot.Translater;
 
 class Main extends Sprite
 {
-	public function new()
-	{
+    public function new()
+    {
         super();        
         Translater.addLanguage(localization, Assets.getText("assets/data/localizations/en-CA.txt"));
         Translater.selectLanguage("en-CA");
         // ...
-	}
+    }
 }
 ```
 
