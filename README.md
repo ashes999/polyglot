@@ -27,9 +27,10 @@ class Main extends Sprite
 {
 	public function new()
 	{
-		super();        
+        super();        
         Translater.addLanguage(localization, Assets.getText("assets/data/localizations/en-CA.txt"));
         Translater.selectLanguage("en-CA");
+        // ...
 	}
 }
 ```
@@ -54,6 +55,7 @@ Pass in an array with all the values to `.get`, along with the key:
 
 ```
 Translater.get("Health", [3, 5]); // Returns: Health: 3/5
+```
 
 # Supported Languages
 
