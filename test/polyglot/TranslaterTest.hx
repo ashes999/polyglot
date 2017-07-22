@@ -32,21 +32,21 @@ class TranslaterTest
     }
 
     @Test
-    public function constructorThrowsIfNoTranslationsExist():Void
+    public function getThrowsIfNoTranslationsExist():Void
     {
         var ex:String = Assert.throws(String, function() {
-            new Translater();
+            Translater.get("hi");
         });
         
         Assert.isTrue(ex.indexOf("addLanguage") > -1);
     }
 
     @Test
-    public function constructorThrowsIfSelectLanguageWasntCalled():Void
+    public function getThrowsIfSelectLanguageWasntCalled():Void
     {
         Translater.addLanguage("en-US", "HELLO_WORLD: Hello, World!");
         var ex:String = Assert.throws(String, function() {
-            new Translater();
+            Translater.get("HELLO_WORLD");
         });
         
         Assert.isTrue(ex.indexOf("selectLanguage") > -1);
@@ -77,7 +77,7 @@ NUM_APPLES: 7');
 
         Translater.selectLanguage("ar-SA");
         
-        var actual = new Translater().get(key);
+        var actual = Translater.get(key);
         Assert.areEqual(expected, actual);
 	}
 
@@ -92,7 +92,7 @@ NUM_APPLES: 7');
 		Translater.addLanguage("en-GB", '${key}: ${message}');
         Translater.selectLanguage("en-GB");
         
-        var actual = new Translater().get(key, [p1, p2]);
+        var actual = Translater.get(key, [p1, p2]);
         var expected = message.replace("{0}", '${p1}').replace("{1}", p2);
         Assert.areEqual(expected, actual);
     }
@@ -103,7 +103,7 @@ NUM_APPLES: 7');
 		Translater.addLanguage("ar-SA", "HELLO_WORLD: السلام عليكم");
         Translater.selectLanguage("ar-SA");
         
-        var actual = new Translater().get("GAME_OVER");
+        var actual = Translater.get("GAME_OVER");
         Assert.areEqual("GAME_OVER", actual);
     }
 }

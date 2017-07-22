@@ -10,18 +10,6 @@ class Translater
     private static var translations = new Map<LanguageAndCultureCode, Map<String, String>>();
     private static var currentLanguage:LanguageAndCultureCode = "";
 
-    public function new()
-    {
-        if (!Translater.translations.keys().hasNext())
-        {
-            throw "Please call Translater.addLanguage before instantiating a translater";
-        }
-        else if (Translater.currentLanguage == "")
-        {
-            throw "Please call Translater.selectLanguage before instantiating a translater";
-        }
-    }
-
     // For testing.
     public static function clear():Void
     {
@@ -68,8 +56,17 @@ class Translater
         Translater.currentLanguage = languageCode;
     }
 
-    public function get(key:String, ?params:Array<Any>):String
+    public static function get(key:String, ?params:Array<Any>):String
     {
+        if (!Translater.translations.keys().hasNext())
+        {
+            throw "Please call Translater.addLanguage before instantiating a translater";
+        }
+        else if (Translater.currentLanguage == "")
+        {
+            throw "Please call Translater.selectLanguage before instantiating a translater";
+        }
+
         var messages = Translater.translations.get(Translater.currentLanguage);
         var toReturn = messages.get(key);
         if (toReturn == null)
